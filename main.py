@@ -34,12 +34,16 @@ class player():
     def get_height(self):
         return self.image.get_height()
 
+class  oblstacalse():
+    
+
 
 def main():
     run = True
     FPS = 60
     clock = py.time.Clock()
     player_vel = 15
+
 
     
     def movement():
@@ -59,8 +63,6 @@ def main():
         p.draw()
 
         py.display.update()
-
-
         
     p = player(WIDTH/4, (HEIGHT/2) - ship.get_height()/2)
 
@@ -83,14 +85,8 @@ def main_menu():
     start_font = py.font.SysFont("comicsans",50)
     start_in = 3
     start = False
-    start_count = 0
     run = True
     while run:
-        if start:
-            start_label = start_font.render(str(start_in), 1, (255,255,255))
-            WIN.blit(start_label, (WIDTH/2 - start_label.get_width()/2, HEIGHT/2))
-            start_in -=1
-
         clock.tick(FPS)
         WIN.blit(BG, (-50, -80)) 
         title_label = title_font.render("Press the mouse to begin...", 1, (255,255,255))
@@ -101,12 +97,13 @@ def main_menu():
                 run = False
             if event.type == py.MOUSEBUTTONDOWN:
                 while start_in > 0:
-                    start = True
-                    start_count += 1
                     if start:
-                        if start_count > FPS * 3:                       
-                            continue
-                          
+                        start_label = start_font.render(str(start_in), 1, (255,255,255))
+                        WIN.blit(start_label, (WIDTH/2 - start_label.get_width()/2, HEIGHT/2))
+                        start_in -=1
+                    
+                    continue
+
                 main()
     py.quit()
 
