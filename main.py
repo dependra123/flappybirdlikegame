@@ -24,6 +24,7 @@ class player():
         self.y = y
         self.health = health
         self.image = ship
+        self.mask = py.mask.from_surface(self.image)
 
     def draw(self):
         WIN.blit(self.image, (self.x, self.y))
@@ -34,8 +35,21 @@ class player():
     def get_height(self):
         return self.image.get_height()
 
+
 class  oblstacalse():
-    
+    UP_OR_DOWN = {
+        0: (triup),
+        1: (tridown)
+
+    }
+    def __init__(self, x, y, type):
+        self.img = self.UP_OR_DOWN[type] 
+        self.mask = py.mask.from_surface(self.img)
+
+    def move(self, vel):
+        self.y += vel
+        
+
 
 
 def main():
