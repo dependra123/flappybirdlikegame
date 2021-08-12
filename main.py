@@ -16,17 +16,19 @@ BG = py.transform.scale(py.image.load(os.path.join("assests", "bg.jpg")), (WIDTH
 ship = py.image.load(os.path.join("assests", "player.png"))
 
 #obstacales
-tridown = py.image.load(os.path.join("assests", "tridown.png"))
-triup = py.image.load(os.path.join("assests", "triup.png"))
+TRIDOWN = py.image.load(os.path.join("assests", "tridown.png"))
+TRIUP = py.image.load(os.path.join("assests", "triup.png"))
 
 class player():
+
+
     def __init__(self, x, y, health = 1):
         self.x = x
         self.y = y
         self.health = health
         self.image = ship
         self.mask = py.mask.from_surface(self.image)
-
+        
     def draw(self):
         WIN.blit(self.image, (self.x, self.y))
         
@@ -37,24 +39,33 @@ class player():
         return self.image.get_height()
 
 
+
+
 class  oblstacalse():
-    UP_OR_DOWN = {
-        0: (triup),
-        1: (tridown)
+    ORINTAION = {
+        0: (TRIUP),
+        1: (TRIDOWN)
 
     }
-    def __init__(self, x, y, type):
-        self.img = self.UP_OR_DOWN[type] 
+    def __init__(self, y, type):
+        self.img = self.ORINTAION[type] 
         self.mask = py.mask.from_surface(self.img)
+
+        
+        if self.img ==  TRIUP:
+            WIN.blit(TRIUP, y)
 
     def move(self, vel):
         self.y += vel
+    def draw(self, window):
+        window.blit(self.img, (self.x, self.y))
     
     def collide(obj1, obj2):
         offset_x = obj2.x - obj1.x
         offset_y = obj2.y - obj1.y
         return obj1.mask.overlap(obj2.mask, (offset_x, offset_y)) != None
-
+    
+    
 
 
 def main():
@@ -63,9 +74,13 @@ def main():
     clock = py.time.Clock()
     player_vel = 15
 
+    enemies = []
+    wave_len = 5
+    enemy_vel = 5
 
     
     def movement():
+        
         keys = py.key.get_pressed()
         if keys[py.K_SPACE] and p.y - player_vel + ship.get_height() / 2 > 0:
             p.y -= player_vel 
