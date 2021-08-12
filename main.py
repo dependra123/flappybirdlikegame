@@ -1,6 +1,7 @@
 import pygame as py
 import os
 import random
+import time
 py.font.init()
 
 #window info
@@ -48,7 +49,11 @@ class  oblstacalse():
 
     def move(self, vel):
         self.y += vel
-        
+    
+    def collide(obj1, obj2):
+        offset_x = obj2.x - obj1.x
+        offset_y = obj2.y - obj1.y
+        return obj1.mask.overlap(obj2.mask, (offset_x, offset_y)) != None
 
 
 
@@ -109,14 +114,9 @@ def main_menu():
         for event in py.event.get():
             if event.type == py.QUIT:
                 run = False
+                
             if event.type == py.MOUSEBUTTONDOWN:
-                while start_in > 0:
-                    if start:
-                        start_label = start_font.render(str(start_in), 1, (255,255,255))
-                        WIN.blit(start_label, (WIDTH/2 - start_label.get_width()/2, HEIGHT/2))
-                        start_in -=1
-                    
-                    continue
+                  
 
                 main()
     py.quit()
