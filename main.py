@@ -47,13 +47,17 @@ class  oblstacalse():
         1: (TRIDOWN)
 
     }
-    def __init__(self, y, type):
+    def __init__(self, downy, upy, x, type):
         self.img = self.ORINTAION[type] 
         self.mask = py.mask.from_surface(self.img)
-
+        self.upy = upy
+        self.downy = downy
+        self.x = x
         
         if self.img ==  TRIUP:
-            WIN.blit(TRIUP, y)
+            WIN.blit(TRIUP, self.upy)
+        if self.img == TRIDOWN:
+            WIN.blit(TRIDOWN, self.downy)
 
     def move(self, vel):
         self.y += vel
@@ -131,6 +135,20 @@ def main_menu():
                 run = False
                 
             if event.type == py.MOUSEBUTTONDOWN:
+                while start_in > 0:
+    
+                    if start:
+                        start_label = start_font.render(str(start_in), 1, (255,255,255))
+                        WIN.blit(start_label, (WIDTH/2 - start_label.get_width()/2, HEIGHT/2))
+                        
+                    start_in -=1
+                    time.sleep(1)  
+                if start_in == 0:
+                        start = True
+
+                    
+                    
+            if start == True:
                   
 
                 main()
