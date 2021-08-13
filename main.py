@@ -41,7 +41,7 @@ class player():
 
 
 
-class  oblstacalse():
+class  Oblstacale():
     ORINTAION = {
         0: (TRIUP),
         1: (TRIDOWN)
@@ -54,15 +54,15 @@ class  oblstacalse():
         self.downy = downy
         self.x = x
         
-        if self.img ==  TRIUP:
-            WIN.blit(TRIUP, self.upy)
-        if self.img == TRIDOWN:
-            WIN.blit(TRIDOWN, self.downy)
+        
 
     def move(self, vel):
-        self.y += vel
+        self.x += vel
     def draw(self, window):
-        window.blit(self.img, (self.x, self.y))
+        if self.img ==  TRIUP:
+            WIN.blit(TRIUP, (self.x, self.upy))
+        if self.img == TRIDOWN:
+            WIN.blit(TRIDOWN, (self.x, self.downy))
     
     def collide(obj1, obj2):
         offset_x = obj2.x - obj1.x
@@ -77,10 +77,14 @@ def main():
     FPS = 60
     clock = py.time.Clock()
     player_vel = 15
+    main_font = py.font.SysFont("comicsans", 50)
+    level = 0
 
-    enemies = []
+
+    oblstacales = []
     wave_len = 5
-    enemy_vel = 5
+    enemy_vel = 100
+    rang = 1200
 
     
     def movement():
@@ -98,7 +102,16 @@ def main():
     def redraw(p):
         WIN.blit(BG, (-50, -80)) 
 
+        level_label = main_font.render(f"level: {level}", 1, (255,255,255))
+
+        WIN.blit(level_label, (10, 10))
+
+        for oblstacale in oblstacales:
+            oblstacale.draw(WIN)
+
         p.draw()
+
+
 
         py.display.update()
         
@@ -107,6 +120,17 @@ def main():
     while run:
         redraw(p)
         clock.tick(FPS)
+
+        if len(oblstacales) == 0:
+            level += 1
+            wave_len += 5
+            for i in range(wave_len):
+                oblstacale = Oblstacale(random.randrange(-600, 0), random.randrange(500, 600), random.randrange(900, rang), random.choice((0, 1)))
+                oblstacales.append(oblstacale)
+        
+        for oblstacale in oblstacales[:]:
+            oblstacale.move(enemy_vel)
+
         for event in py.event.get():
             if event.type == py.QUIT:
                 quit()
