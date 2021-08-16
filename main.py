@@ -136,7 +136,7 @@ def main():
                 quit()
         
         movement()
-
+        
 
 
 
@@ -162,11 +162,15 @@ def main_menu():
                 while start_in > 0:
     
                     if start:
+                        py.display.update()
                         start_label = start_font.render(str(start_in), 1, (255,255,255))
                         WIN.blit(start_label, (WIDTH/2 - start_label.get_width()/2, HEIGHT/2))
                         
                     start_in -=1
-                    time.sleep(1)  
+                    
+
+                    time.sleep(1) 
+
                 if start_in == 0:
                         start = True
 
