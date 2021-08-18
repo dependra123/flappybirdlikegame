@@ -37,6 +37,8 @@ class player():
 
     def get_height(self):
         return self.image.get_height()
+    def collision(self, obj):
+        return collide(self, obj)
 
 
 
@@ -47,13 +49,13 @@ class  Oblstacale():
         1: (TRIDOWN)
 
     }
-    def __init__(self, downy, upy, x, type):
+    def __init__(self, downy, upy, x, y, type):
         self.img = self.ORINTAION[type] 
         self.mask = py.mask.from_surface(self.img)
         self.upy = upy
         self.downy = downy
         self.x = x
-        
+        self.y = y
         
 
     def move(self, vel):
@@ -64,10 +66,10 @@ class  Oblstacale():
         if self.img == TRIDOWN:
             WIN.blit(TRIDOWN, (self.x, self.downy))
     
-    def collide(obj1, obj2):
-        offset_x = obj2.x - obj1.x
-        offset_y = obj2.y - obj1.y
-        return obj1.mask.overlap(obj2.mask, (offset_x, offset_y)) != None
+def collide(obj1, obj2):
+    offset_x = obj2.x - obj1.x
+    offset_y = obj2.y - obj1.y
+    return obj1.mask.overlap(obj2.mask, (offset_x, offset_y)) != None
     
     
 
@@ -125,15 +127,19 @@ def main():
             level += 1
             wave_len += 5
             for i in range(wave_len):
-                oblstacale = Oblstacale(random.randrange(-600, 0), random.randrange(500, 600), random.randrange(900, rang), random.choice((0, 1)))
+                oblstacale = Oblstacale(random.randrange (-600, 0), random.randrange(500, 600), random.randrange(900, rang), 0, random.choice((0, 1)))
                 oblstacales.append(oblstacale)
         
         for oblstacale in oblstacales[:]:
             oblstacale.move(enemy_vel)
-
+       
+        if collide(p, oblstacale):
+            oblstacales.remove(oblstacale)
+        
         for event in py.event.get():
             if event.type == py.QUIT:
                 quit()
+        
         
         movement()
         
@@ -162,12 +168,12 @@ def main_menu():
                 while start_in > 0:
     
                     if start:
-                        py.display.update()
                         start_label = start_font.render(str(start_in), 1, (255,255,255))
                         WIN.blit(start_label, (WIDTH/2 - start_label.get_width()/2, HEIGHT/2))
                         
                     start_in -=1
                     
+                    py.display.update()
 
                     time.sleep(1) 
 
