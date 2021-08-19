@@ -27,7 +27,7 @@ class player():
         self.y = y
         self.health = health
         self.image = ship
-        self.mask = py.mask.from_surface(self.image)
+        self.mask = py.mask.from_surface(ship)
         
     def draw(self):
         WIN.blit(self.image, (self.x, self.y))
@@ -37,16 +37,14 @@ class player():
 
     def get_height(self):
         return self.image.get_height()
-    def collision(self, obj):
-        return collide(self, obj)
 
 
 
 
 class  Oblstacale():
     ORINTAION = {
-        0: (TRIUP),
-        1: (TRIDOWN)
+        'a': TRIUP,
+        'b': TRIDOWN
 
     }
     def __init__(self, downy, upy, x, y, type):
@@ -55,7 +53,7 @@ class  Oblstacale():
         self.upy = upy
         self.downy = downy
         self.x = x
-        self.y = y
+        
         
 
     def move(self, vel):
@@ -66,10 +64,7 @@ class  Oblstacale():
         if self.img == TRIDOWN:
             WIN.blit(TRIDOWN, (self.x, self.downy))
     
-def collide(obj1, obj2):
-    offset_x = obj2.x - obj1.x
-    offset_y = obj2.y - obj1.y
-    return obj1.mask.overlap(obj2.mask, (offset_x, offset_y)) != None
+
     
     
 
@@ -84,8 +79,8 @@ def main():
 
 
     oblstacales = []
-    wave_len = 5
-    enemy_vel = 100
+    wave_len = 10
+    enemy_vel = -50
     rang = 1200
 
     
@@ -117,7 +112,7 @@ def main():
 
         py.display.update()
         
-    p = player(WIDTH/4, (HEIGHT/2) - ship.get_height()/2)
+    p = player(WIDTH//4, (HEIGHT//2) - ship.get_height()//2)
 
     while run:
         redraw(p)
@@ -126,16 +121,19 @@ def main():
         if len(oblstacales) == 0:
             level += 1
             wave_len += 5
-            for i in range(wave_len):
-                oblstacale = Oblstacale(random.randrange (-600, 0), random.randrange(500, 600), random.randrange(900, rang), 0, random.choice((0, 1)))
+            for oblstacale in range(wave_len):
+                oblstacale = Oblstacale(random.randrange(-600, 0), random.randrange(500, 600), random.randrange(900, rang),0, random.choice(('a', 'b')))
                 oblstacales.append(oblstacale)
         
         for oblstacale in oblstacales[:]:
             oblstacale.move(enemy_vel)
        
-        if collide(p, oblstacale):
-            oblstacales.remove(oblstacale)
-        
+        offset_x = oblstacale.x - p.x
+        offset_y = oblstacale.y - p.y        
+        if p.mask.overlap(oblstacale.mask(offset_x, offset_y)):
+
+            print('works')
+
         for event in py.event.get():
             if event.type == py.QUIT:
                 quit()
